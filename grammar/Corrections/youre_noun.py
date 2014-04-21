@@ -20,20 +20,20 @@ def do(self, cur):
     if next_word_1.word_lower != 'own':
         if next_word_1.word_lower == 'day':
             if self.sequence.next_has_continuous(2, 1):
-                # Exception: {you're day} dream(ers|ing)
+                # Exception 1: {you're day} dream(ers|ing)
                 if self.sequence.next_word(2).word_lower in SET_DAY_EXCEPT:
                     return
         elif next_word_1.word_lower == 'life':
             if self.sequence.next_has_continuous(2, 1):
-                # Exception: "[you're life] -ing"
+                # Exception 2a: "[you're life] -ing"
                 if self.sequence.next_word(2).is_participle_present():
                     return
-                # Exception: "[you're life] (sav|wast|chang)ers?"
+                # Exception 2b: "[you're life] (sav|wast|chang)ers?"
                 elif self.sequence.next_word(2).word_lower in SET_LIFE_EXCEPT:
                     return
                 # Allowed: you're life _
             else:
-                # Exception: "you're life."
+                # Exception 3: "you're life." [no following word]
                 return
         else:
             return

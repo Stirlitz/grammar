@@ -43,20 +43,26 @@ class ParserFunctions(unittest.TestCase):
         self.negative("This sentence is fine.")
 
     def test_possessive_as_be(self):
-        self.positive("Its the best", "[It's] the best")
+        self.positive("Its here or there", "[It's] here or there")
+        self.positive("Your the best", "[You're] the best")
         self.positive("Whose your friend?", "[Who's] your friend?")
-        # Book titles in ALLCAPS should be ignored.
+        # Exception 1
         self.negative("Some author, whose THE BOOK does, is")
+        # Exception 2
+        self.negative("Look at its after effects!")
+        # Exception 3
+        self.negative("See your all but nothing system")
 
     def test_youre_noun(self):
         self.positive("of you're own!", "of [your] own!")
+        # Exception 1
         self.negative("You're day dreamers")
         self.negative("You're day dreaming")
-        # self.negative("You're doing something wrong!")
-        # Exception life savers, wasters, changers, etc.
+        # Exception 2
         self.negative(
-            "You're life savers!, you're life wasters, you're life changers!")
-        # Exception: You're life [end of sentence]
+            "You're life savers, you're life wasters, you're life changers!")
+        self.negative("you're life changing!")
+        # Exception 3
         self.negative("You're life.")
         self.negative("You're life!")
         self.negative("You're life")
@@ -66,13 +72,13 @@ class ParserFunctions(unittest.TestCase):
 
     def test_there_own(self):
         self.positive("To each there own", "To each [their] own")
-        # Exception: Do/es _ out there own _ ?
+        # Exception
         self.negative("Do any people out there own something?")
         self.negative("Does anyone out there own this item?")
         self.negative("Does someone out there own this?")
         self.negative("Does no one out there own that?")
         self.negative("Do any of you out there own these items?")
-        # Exception with dropped modal verb
+        # Exception with fused word
         self.negative("anyone out there own it?")
 
     def test_whose_been(self):
@@ -84,13 +90,12 @@ class ParserFunctions(unittest.TestCase):
         self.positive("They're is a cow", "[There's] a cow")
         self.positive("They're is and they're are", "[There's] and [they] are")
         self.positive("they're aren't any of those.", "[they] aren't any of")
-        # Exception: their, there, and they're (any order)
+        # Exception 1
         self.negative("the difference between their, there, and they're is")
         self.negative("the difference between there, their, and they're is")
-        # Exception: 'they're' is they are
+        # Exception 2
         self.negative("they're is they are")
-        # Exception: they're, aren't they?
-        self.negative("they're, aren't they?")
+        self.negative("they're, aren't they?") # 2b
 
     def test_their_modal(self):
         self.positive("Their is", "[There] is")
@@ -98,6 +103,7 @@ class ParserFunctions(unittest.TestCase):
 
     def test_be_noun(self):
         self.positive("I am hear", "I am [here]")
+        self.positive("I am board with", "I am [bored] with")
         self.positive("I am hear to win", "I am [here] to win")
         self.positive("They are hear", "They are [here]")
         self.positive("Those people are hear", "people are [here]")
@@ -112,16 +118,18 @@ class ParserFunctions(unittest.TestCase):
     def test_then(self):
         self.positive("this is better then that", "this is better [than] that")
         self.positive("I have more then you do", "I have more [than] you do")
-        # Exception: If/when _ better, then _
-        self.negative("if it is better then use it")
-        self.negative("when it is better then use it")
+        # Exception 1
+        self.negative("wait until it's better then do it")
+        # Exception 2
+        self.negative("if it is better then you use it")
+        self.negative("when it is better then get it")
 
     def test_than(self):
         self.positive("I did this and than I did that",
                       "did this and [then] I did that")
-        # Exception: 'then' and 'than'
+        # Exception 1
         self.negative("the difference between then and than")
-        # Exception: [comparative] than _ and/or than _
+        # Exception: 2
         self.negative("better than something and than something else")
         self.negative("Is it more than they do or than I do?")
 
@@ -129,16 +137,18 @@ class ParserFunctions(unittest.TestCase):
         self.positive("I should of done it", "I should['ve] done it")
         self.positive("I shouldn't of done it", "I shouldn't['ve] done it")
         self.positive("I should of went there", "I should['ve gone] there")
-        # Exception: could of course
+        # Exception 1
         self.negative("He could of course do")
-        # Exception: would (of [pronoun]) [verb]
+        # Exception 2
         self.negative("would of themselves justify")
-        # Exception: [determiner] might of _
+        # Exception 3a
         self.negative("Face the full might of our army!")
         self.negative("the might of some guy")
         self.negative("the full might of them")
         self.negative("no might of him")
-        # Exception: [comparative] of _ than _ would of _
+        # Exception 3b
+        self.negative("might of the people")
+        # Exception: 4
         self.negative("more of this than they would of that")
 
     def test_your_are(self):

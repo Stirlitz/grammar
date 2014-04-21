@@ -21,13 +21,13 @@ def do(self, cur):
     # Removed: Be {there day} and night
     # Removed: "they're be" is full of improper usage
     """
-    # Exception: the difference between their/there, <, and {they're is}
+    # Exception 1: the difference between their/there, <, and {they're is}
     if (self.sequence.prev_has_continuous(1) and self.sequence.prev_has(2) and
         self.sequence.prev_word(1).word_lower == 'and' and
             self.sequence.prev_word(2).word_lower in SET_THERETHEIR):
             return
-    # Exception: {'they're' is} 'they are'
-    # Exception: {they're, aren't} they?"
+    # Exception 2b: {'they're' is} 'they are'
+    # Exception 2: {they're, aren't} they?"
     if self.sequence.next_has_continuous(2):
         if self.sequence.next_word(2).word_lower == 'they':
             return

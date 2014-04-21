@@ -18,14 +18,15 @@ def do(self, cur):
     if not self.sequence.next_has_continuous(2):
         return
     next_word_1 = self.sequence.next_word(1)
-    # Exception: Some author, {whose THE} BOOK does, is
+    # Exception 1: Some author, {whose THE} BOOK does, is
+    # - book titles in ALLCAPS should be ignored
     if next_word_1.caps == 2:
         return
-    # Exception: {its after} effects
+    # Exception 2: {its after} effects
     if next_word_1.word_lower == 'after':
         if self.sequence.next_word(2).word_lower in SET_EFFECT:
             return
-    # Exception: {your all} but nothing system
+    # Exception 3: {your all} but nothing system
     elif next_word_1.word_lower == 'all':
         if self.sequence.next_word(2).word_lower == 'but':
             return

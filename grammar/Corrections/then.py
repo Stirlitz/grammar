@@ -16,10 +16,10 @@ def do(self, cur):
         return
     if not self.sequence.next_has_continuous(1):
         return
-    # Exception: then <verb:(be|do|did|get|got)|lol> <noun>
+    # Exception 1: then <verb:(be|do|did|get|got)|lol> <noun>
     if self.sequence.next_word(1).word_lower in SET_NOFOLLOW:
         return
-    # Exception: if/when ... {better(,) then}
+    # Exception 2: if/when ... {better(,) then}
     for p in prev_words:
         if p.word_lower == 'if' or p.word_lower == 'when':
             return

@@ -16,12 +16,13 @@ def do(self, cur):
         return
     prev_word = prev_words[0]
     if prev_word.word_lower == 'and':
-        # Exception: the difference between then {and than}
+        # Exception 1: the difference between 'then' {and 'than'}
         if prev_words[1].word_lower == 'then':
             return
     elif prev_word.word_lower not in SET_BUTYET:
         return
-    # Exception: (better|worse|more|less) than N<NP>+ {and/or than} <NP>+
+    # Exception 2:
+    # <comparative:(better|worse|more|less)> than N<NP>+ {and/or than} <NP>+
     if prev_word.word_lower == 'and':  # in ['and', 'or']
         if len(prev_words) >= 4:  # [better than <NP>+ (prev)] than
             # do not check most recent 3

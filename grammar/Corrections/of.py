@@ -18,10 +18,6 @@ def do(self, cur):
     ought to (low traffic)
     in {need not of} better days
     had better (awkward 've)
-
-    TODO
-    "one [would(,) of] course(,) need"
-    "more of this than I [would of] that"
     """
     prev_words = self.sequence.prev_get_words_continuous()
     if len(prev_words) < 1:
@@ -34,22 +30,22 @@ def do(self, cur):
     next_word_1 = None
     if self.sequence.next_has_continuous(1):
         next_word_1 = self.sequence.next_word(1)
-        # Exception: He {could(,) of} course(,) ...
+        # Exception 1: He {could(,) of} course(,) ...
         if next_word_1.word_lower == 'course':
             return
-        # Exception: this {would of} themselves justify
+        # Exception 2: this {would of} themselves justify
         elif next_word_1.is_pronoun_personal():
             return
     if prev_words[not_shift].word_lower == 'might':
-        # Exception: <determiner> {might of}
+        # Exception 3a: <determiner> {might of}
         if len(prev_words) >= 2 + not_shift and prev_words[1 + not_shift].is_determiner():
             return
-        # Exception: {might of } <determiner|NP>
+        # Exception 3b: {might of} <determiner|NP>
         if next_word_1 and (next_word_1.is_determiner() or next_word_1.is_pronoun_personal()):
             return
     elif prev_words[not_shift].word_lower not in SET_MODAL:
         return
-    # Exception: (more|less) (of) <NP>+ than <NP>+ {<modal> of} <NP>+
+    # Exception 4: (more|less) (of) <NP>+ than <NP>+ {<modal> of} <NP>+
     # [more of <word>+ than <word>+ (prev) not?] of
     if len(prev_words) >= 6 + not_shift:
         finding = 0
