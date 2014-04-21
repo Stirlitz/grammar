@@ -135,6 +135,7 @@ class ParserFunctions(unittest.TestCase):
 
     def test_of(self):
         self.positive("I should of done it", "I should['ve] done it")
+        self.positive("I should not of done it", "I should not['ve] done it")
         self.positive("I shouldn't of done it", "I shouldn't['ve] done it")
         self.positive("I should of went there", "I should['ve gone] there")
         # Exception 1
@@ -203,6 +204,37 @@ class ParserFunctions(unittest.TestCase):
         self.positive("their is.", "[there] is")
         self.positive("their is,", "[there] is")
         self.positive("their is;", "[there] is")
+
+    def test_boundary_checks(self):
+        """Make sure that the checks do not overread"""
+        # possessive_as_be: <its/your/whose> _
+        self.negative("It's its") # its_own: _ <it's>
+        self.negative("your") # your_are: <your> _
+        self.negative("Whose?") # whose_been: <whose> _
+        # youre_noun: <you're> _
+        self.negative("See you're")
+        # there_own: _ <own>
+        self.negative("Own this item now")
+        # theyre_be: <they're> _
+        self.negative("See, they're")
+        # their_modal: <their> _
+        self.negative("their")
+        # be_noun: _ <hear/board with>
+        self.negative("Hear the silence")
+        self.negative("Board the train")
+        self.negative("Board with them")
+        # then: _ <then>
+        self.negative("do it then")
+        # than: _ <and/but/yet> _
+        self.negative("And it works")
+        self.negative("this and")
+        # of: _ <of> _
+        self.negative("of")
+        # supposed_to: _ <supposed> _
+        self.negative("They supposed")
+        self.negative("supposed")
+        # whom_be: _ <whom> _
+        self.negative("whom")
 
 if __name__ == '__main__':
     unittest.main()
