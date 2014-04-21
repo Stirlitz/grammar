@@ -9,9 +9,6 @@ matrix:
   allow_failures:
     - python: "3.2" # because u'' doesn't work
     - python: "pypy"
-branches:
-  except:
-    - prod
 install: pip install coveralls
 script:
   - coverage run --branch --source=grammar test.py
