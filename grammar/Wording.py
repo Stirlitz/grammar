@@ -157,8 +157,7 @@ def generate(corrections, corrected, user):
     if verbs:
         predicate += verbs + ' '
     # jump that quote
-    predicate += '%s instead.' % (english_join(map(lambda c: u'“%s”' %
-                                  c, corrections)))
+    predicate += '%s instead.' % (english_join(tuple(map(u'“{0}”'.format, corrections))))
     # 65% chance to use 2nd person instead of 3rd
     if second_person:
         # Invert the subject so that we address one personally
@@ -180,3 +179,7 @@ def generate(corrections, corrected, user):
 #  if len(result) > 140:
 #      result = result[:139] + u'…'
     return result
+
+
+def generate_long(corrections, corrected, user):
+    raise NotImplementedError

@@ -3,9 +3,9 @@
 """Parser and correction manager for Your_Parser"""
 
 from . import Corrections
+from . import Wording
 from .Transformers import transform
 from .Units import SequenceManager
-from .Wording import generate
 
 
 class CorrectionManager(object):
@@ -181,6 +181,14 @@ class CorrectionManager(object):
                         current_end = this_end
         return bool(self.corrections)  # len(self.corrections) > 0
 
-    def generate_wording(self, user, callback=generate):
-        """ Output random wording for the corrections"""
+    def generate(self, user, callback):
+        """ Output a random message for the corrections"""
         return callback(self.corrections, self.corrected.keys(), user)
+
+    def generate_wording(self, user):
+        """ Output a random tweet for the corrections"""
+        return self.generate(user, Wording.generate)
+
+    def generate_wording_long(self, user):
+        """ Output a random post for the corrections"""
+        return self.generate(user, Wording.generate_long)

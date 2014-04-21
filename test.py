@@ -188,6 +188,10 @@ class ParserFunctions(unittest.TestCase):
         self.positive("people whom was", "people [who were]")
         self.positive("You see me, whom is your friend.",
                       "see me, [who am] your friend")
+        # A preceding word is required for verb conjugations
+        self.negative("Whom is it?")
+        # Other verbs might be valid for "whom"
+        self.negative("Whom do they see?")
 
     def test_case(self):
         # lowercase detection
@@ -232,6 +236,7 @@ class ParserFunctions(unittest.TestCase):
         self.negative("their")
         self.negative("their item")
         # be_noun: _ <hear/board with>
+        self.negative("They can hear you")
         self.negative("Hear the silence")
         self.negative("Look at the board")
         self.negative("Board the train")
@@ -246,11 +251,17 @@ class ParserFunctions(unittest.TestCase):
         self.negative("of")
         self.negative("not of this but that")
         # supposed_to: _ <supposed> _
-        self.negative("They supposed it")
-        self.negative("supposed not")
+        self.negative("They supposed")
+        self.negative("They supposed not")
         # whom_be: _ <whom> _
         self.negative("whom they say")
         self.negative("for whom?")
+
+    def test_wording(self):
+        """Verify that wording can be generated without failing"""
+        self.positive("Their is and your don't supposed to")
+        self.parser.generate_wording('@')
+        #self.parser.generate_wording_long('@')
 
 if __name__ == '__main__':
     unittest.main()
