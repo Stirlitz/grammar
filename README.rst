@@ -7,7 +7,7 @@ grammar
     :alt: Build status
 
 .. image:: https://coveralls.io/repos/theonlypwner/grammar/badge.png?branch=master
-    :target: https://coveralls.io/r/theonlypwner/crc32?branch=master
+    :target: https://coveralls.io/r/theonlypwner/grammar?branch=master
     :alt: Coverage Status
 
 @_grammar_ might correct your grammar on Twitter!
