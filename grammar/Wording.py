@@ -54,7 +54,7 @@ said_past = ('used', 'said', 'tweeted', 'posted')  # (simple [past) perfect]
 said_infinitive = ('use', 'say', 'tweet', 'post')  # without 'to'
 tweet_noun = ('a tweet', 'a post', 'a status', 'a message',
               'a status update', 'an update')  # singular
-message = [
+MESSAGE = [
     # (clause, add ' that'),
     # confident
     ('it is the case that', False),
@@ -126,7 +126,7 @@ def generate(corrections, corrected, user):
         # (Must?, 'it is', ('who should',), said_infinitive), # cleft
     ]
     # Build the sentence!
-    message = random.choice(message)
+    message = random.choice(MESSAGE)
     clause = message[0]
     modals = modals_intent_perfect
     verbs = said_past
