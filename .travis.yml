@@ -7,7 +7,10 @@ python:
   - "pypy"
 matrix:
   allow_failures:
-    - python: "pypy"
+    - python:
+      - "3.2"
+      - "3.3"
+      - "pypy"
 install: pip install coveralls
 script:
   - coverage run --branch --source=grammar test.py
