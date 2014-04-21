@@ -11,6 +11,9 @@ matrix:
       - "3.2"
       - "3.3"
       - "pypy"
+branches:
+  except:
+    - production
 install: pip install coveralls
 script:
   - coverage run --branch --source=grammar test.py
