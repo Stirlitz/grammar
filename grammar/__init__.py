@@ -61,7 +61,7 @@ class CorrectionManager(object):
                 Corrections.its_own.do(self, cur)
                 Corrections.there_own.do(self, cur)
             # elif cur.word_lower == 'going':
-            #     Corrections.im_going.do(self, cur) # DISABLED
+            # Corrections.im_going.do(self, cur) # DISABLED
             elif cur.word_lower == 'whose':
                 Corrections.whose_been.do(self, cur)
             elif cur.word_lower == "they're":

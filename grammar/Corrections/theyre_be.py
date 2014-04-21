@@ -7,6 +7,7 @@ SET_MODAL_SINGULAR = set(['is', "isn't"])
 # 'is' is already checked
 SET_MODAL = SET_BE | SET_OF_MODAL
 
+
 def do(self, cur):
     """Keyword: they're
     Src: _ is

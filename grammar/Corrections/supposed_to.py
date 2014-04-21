@@ -3,6 +3,7 @@
 SET_3 = set(['he', 'she', 'it'])
 SET_2 = set(['we', 'you', 'they'])  # 'i'
 
+
 def do(self, cur):
     """Keyword: supposed
     Src: (<word> doesn't|I don't|<word> (?<!I )don't) _ to
