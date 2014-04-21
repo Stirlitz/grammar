@@ -3,6 +3,12 @@
 """Unit Tests for grammar"""
 
 import grammar
+
+from io import StringIO
+import logging
+from logging import StreamHandler
+from logging.handlers import MemoryHandler
+import sys
 import unittest
 
 
@@ -95,7 +101,7 @@ class ParserFunctions(unittest.TestCase):
         self.negative("the difference between there, their, and they're is")
         # Exception 2
         self.negative("they're is they are")
-        self.negative("they're, aren't they?") # 2b
+        self.negative("they're, aren't they?")  # 2b
 
     def test_their_modal(self):
         self.positive("Their is", "[There] is")
@@ -223,9 +229,9 @@ class ParserFunctions(unittest.TestCase):
     def test_boundary_checks(self):
         """Make sure that the checks do not overread"""
         # possessive_as_be: <its/your/whose> _
-        self.negative("It's its") # its_own: _ <it's>
-        self.negative("your") # your_are: <your> _
-        self.negative("Whose?") # whose_been: <whose> _
+        self.negative("It's its")  # its_own: _ <it's>
+        self.negative("your")  # your_are: <your> _
+        self.negative("Whose?")  # whose_been: <whose> _
         # youre_noun: <you're> _
         self.negative("See you're")
         # there_own: _ <own>
@@ -259,9 +265,18 @@ class ParserFunctions(unittest.TestCase):
 
     def test_wording(self):
         """Verify that wording can be generated without failing"""
-        self.positive("Their is and your don't supposed to")
-        self.parser.generate_wording('@')
-        #self.parser.generate_wording_long('@')
+        self.positive(
+            "Their is and your don't supposed to! (blah) They think their is.")
+        logging.debug(self.parser.generate_wording('')
+                      .encode('ascii', 'replace'))
+        # self.parser.generate_wording_long('')
 
 if __name__ == '__main__':
+    stream_null = StringIO()
+    logging.basicConfig(stream=stream_null,level=logging.DEBUG)
+    handler_stream = StreamHandler(stream=sys.stderr)
+    handler_mem = MemoryHandler(1024, target=handler_stream)
+    handler_mem.setLevel(logging.DEBUG)
+    handler_mem.setFormatter(logging.Formatter())
+    logging.getLogger().addHandler(handler_mem)
     unittest.main()
