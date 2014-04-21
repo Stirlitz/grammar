@@ -25,12 +25,13 @@ Usage
 ============
 
 .. code-block:: python
+
 	# Create parser
 	parser = grammar.CorrectionManager()
 
 	# For each text sample,
-	if self.parser.load_text(text, **options):
-		tweet = self.parser.generate_wording(username)
+	if self.parser.load_text(tweet['text'], **options):
+		tweet = self.parser.generate_wording(tweet['username'])
 		# ... publish the tweet
 	else:
 		# no errors detected
