@@ -163,10 +163,16 @@ class ParserFunctions(unittest.TestCase):
         self.positive("I doesn't supposed to", "[I'm not] supposed to")
         self.positive("you doesn't supposed to", "you [aren't] supposed to")
         self.positive("he don't supposed to", "he [isn't] supposed to")
+        # Ignore modals
+        self.negative("I can't supposed to")
 
     def test_whom_be(self):
+        self.positive("he whom is", "he [who] is")
         self.positive("a person whom is", "person [who] is")
+        self.positive("a person whom was", "person [who] was")
+        self.positive("I whom was", "I [who] was")
         self.positive("people whom are", "people [who] are")
+        self.positive("people whom were", "people [who] were")
         self.positive("see whomever is", "see [whoever] is")
         self.positive("Whomever is", "[Whoever] is")
         # "Whoever" is always singular
@@ -174,8 +180,12 @@ class ParserFunctions(unittest.TestCase):
         self.positive("Whomever be", "[Whoever is]")
         self.positive("Whomever are", "[Whoever is]")
         # Correct improper verbs
+        self.positive("I whom are", "I [who am]")
+        self.positive("I whom were", "I [who was]")
         self.positive("a person whom are", "person [who is]")
+        self.positive("a person whom were", "person [who was]")
         self.positive("people whom is", "people [who are]")
+        self.positive("people whom was", "people [who were]")
         self.positive("You see me, whom is your friend.",
                       "see me, [who am] your friend")
 
@@ -191,6 +201,7 @@ class ParserFunctions(unittest.TestCase):
         self.positive("Their is you're own", "[There] is [your] own")
         self.positive("Your you're own", "[You're your] own")
         self.positive("Its there own item", "[It's their] own item")
+        self.positive("Your don't supposed to!", "[You aren't] supposed to!")
 
     def test_punctuation(self):
         # Keep question marks and exclamation marks
@@ -219,22 +230,27 @@ class ParserFunctions(unittest.TestCase):
         self.negative("See, they're")
         # their_modal: <their> _
         self.negative("their")
+        self.negative("their item")
         # be_noun: _ <hear/board with>
         self.negative("Hear the silence")
+        self.negative("Look at the board")
         self.negative("Board the train")
         self.negative("Board with them")
-        # then: _ <then>
-        self.negative("do it then")
+        # then: _ <comparative> <then> _
+        self.negative("Then they went somewhere")
+        self.negative("Do it better then")
         # than: _ <and/but/yet> _
         self.negative("And it works")
         self.negative("this and")
-        # of: _ <of> _
+        # of: _ (not)? <of> _
         self.negative("of")
+        self.negative("not of this but that")
         # supposed_to: _ <supposed> _
-        self.negative("They supposed")
-        self.negative("supposed")
+        self.negative("They supposed it")
+        self.negative("supposed not")
         # whom_be: _ <whom> _
-        self.negative("whom")
+        self.negative("whom they say")
+        self.negative("for whom?")
 
 if __name__ == '__main__':
     unittest.main()

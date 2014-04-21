@@ -17,19 +17,21 @@ def do(self, cur):
         return
     if not self.sequence.prev_has_continuous(2):
         return
-    person = 2  # note: 2nd person is the same as plural
+    person = 2  # Note that 2nd person = plural
     prev_word_1 = self.sequence.prev_word(1)
     prev_word_2 = self.sequence.prev_word(2)
-    if prev_word_2.word_lower == "i":
-        person = 1
-    elif prev_word_1.word_lower == "don't":
-        if prev_word_2.word_lower in SET_3:
+    if prev_word_1.word_lower == "don't":
+        if prev_word_2.word_lower == "i":
+            person = 1
+        elif prev_word_2.word_lower in SET_3:
             person = 3
         # else: person = 2
     elif prev_word_1.word_lower == "doesn't":
-        # person = 2
-        if not prev_word_2.word_lower in SET_2:
+        if prev_word_2.word_lower == "i":
+            person = 1
+        elif not prev_word_2.word_lower in SET_2:
             person = 3
+        # else: person = 2
     else:
         return
     self.matched('supposed-to')

@@ -15,8 +15,8 @@ def do(self, cur):
     person = 0
     if cur.word_lower == 'whomever':
         person = -1
-    elif cur.word_lower != 'whom':
-        return
+    # elif cur.word_lower != 'whom':
+    #     return
     if not self.sequence.next_has_continuous(1):
         return
     next_word_1 = self.sequence.next_word(1)
