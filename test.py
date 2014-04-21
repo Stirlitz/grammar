@@ -14,12 +14,12 @@ import unittest
 
 class ParserFunctions(unittest.TestCase):
     options = {
-        # 'do_decode_html': True,
+        'do_decode_html': False,
+        'do_ellipsis': False,
         'do_quotations': True,  # uses regex
-        # 'do_ellipsis': True,
-        # 'do_askfm': False, # uses regex
-        # 'do_fixcaps': True, # uses regex
-        # 'do_fixi': True, # uses regex
+        'do_askfm': False,  # uses regex
+        'do_fixcaps': False,  # uses regex
+        'do_fixi': False,  # uses regex
         'do_fixnewline': True,  # uses regex
     }
 
@@ -43,7 +43,40 @@ class ParserFunctions(unittest.TestCase):
     def negative(self, text):
         self.assertFalse(self.load(text))
 
-    # Tests
+    # Transformer Tests
+    def test_transform(self):
+        """Test the text transformations."""
+        # Create copy with all options set to True
+        options = self.options
+        for k in options:
+            options[k] = True
+        # Check helper function
+
+        def check_transform(text, expected):
+            self.assertEqual(
+                grammar.Transformers.transform(text, **options), expected)
+        # do_decode_html
+        check_transform('&#39;&quot;&gt;&lt;&amp;', '\'"><&')
+        # do_ellipsis
+        check_transform('...', u'…')
+        # do_quotations
+        check_transform('He said, "hi everybody!" They heard.',
+                        u'He said, … They heard.')
+        # do_askfm
+        check_transform(
+            u'Who are you? — I am he. https://askfm/blah', 'I am he.')
+        # do_fixcaps
+        check_transform('CONTENT MUST NOT BE WRITTEN ENTIRELY IN CAPITALS',
+                        'Content must not be written entirely in capitals')
+        check_transform('Titlecase Is Annoying Too For Some People',
+                        'Titlecase is annoying too for some people')
+        # do_fixi
+        check_transform("i don't know how to capitalize i",
+                        "I don't know how to capitalize I")
+        # do_fixnewline
+        check_transform('1\n2 \n 3', '1 / 2 / 3')
+
+    # Parser Tests
     def test_load_regular(self):
         """Try to properly load a regular sentence."""
         self.negative("This sentence is fine.")
@@ -160,7 +193,7 @@ class ParserFunctions(unittest.TestCase):
         self.positive("I did this and than I did that",
                       "did this and [then] I did that")
         # Exception 1
-        self.negative("the difference between then and than")
+        self.negative("the difference between then and than is")
         # Exception: 2
         self.negative("better than something and than something else")
         self.negative("Is it more than they do or than I do?")
@@ -206,8 +239,9 @@ class ParserFunctions(unittest.TestCase):
         # Past tense (detect person)
         self.positive("you didn't supposed to", "you [weren't] supposed to")
         self.positive("he didn't supposed to", "he [wasn't] supposed to")
+        self.negative("this guy didn't supposed to")  # unknown person
         # Boundary check: (2) _ (to)
-        self.negative("They supposed")
+        self.negative("They supposed to")
         self.negative("They supposed not")
         # Restriction: <be>, not <modal> _
         self.negative("I can't supposed to")
@@ -277,7 +311,9 @@ class ParserFunctions(unittest.TestCase):
             "Their is and your don't supposed to! (blah) They think their is.")
         logging.debug(self.parser.generate_wording('')
                       .encode('ascii', 'replace'))
-        # self.parser.generate_wording_long('')
+        # not implemented yet
+        self.assertRaises(NotImplementedError,
+                          self.parser.generate_wording_long, '')
 
 if __name__ == '__main__':
     stream_null = StringIO()

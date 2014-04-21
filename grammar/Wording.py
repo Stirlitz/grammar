@@ -131,10 +131,10 @@ def generate(corrections, corrected, user):
     modals = modals_intent_perfect
     verbs = said_past
     # 70% chance to use "that"
-    if message[1] and 70 > random.randrange(0, 100): # pragma: no cover
+    if message[1] and 70 > random.randrange(0, 100):  # pragma: no cover
         clause += ' that'
     # Alter it! (40%)
-    if 40 > random.randrange(0, 100): # pragma: no cover
+    if 40 > random.randrange(0, 100):  # pragma: no cover
         message_alter = random.choice(message_alter)
         if message_alter[1]:
             # 50% chance to bypass the first clause, if possible
@@ -151,19 +151,19 @@ def generate(corrections, corrected, user):
     predicate = ''
     # choose
     modals = random.choice(modals)
-    if modals: # pragma: no cover
+    if modals:  # pragma: no cover
         predicate += modals + ' '
     verbs = random.choice(verbs)
-    if verbs: # pragma: no cover
+    if verbs:  # pragma: no cover
         predicate += verbs + ' '
     # jump that quote
     predicate += '%s instead.' % (english_join(tuple(map(u'“{0}”'.format, corrections))))
     # 65% chance to use 2nd person instead of 3rd
-    if second_person:
+    if second_person:  # pragma: no cover
         # Invert the subject so that we address one personally
         result = '@%s, %s you %s' % (user, clause, predicate)
     # No subject inversion, but we have to make the first letter uppercase
-    else:
+    else:  # pragma: no cover
         result = '%s @%s %s' % (
             clause[0].upper() + clause[1:], user, predicate)
     # Do we need to check? Any space for why?
@@ -173,7 +173,7 @@ def generate(corrections, corrected, user):
         for w in corrected:
             why.append(random.choice(why_reasons[w]))
         why = ' %s.' % first_cap(english_join(why))
-        if len(result) + len(why) <= 140:
+        if len(result) + len(why) <= 140:  # pragma: no cover
             result += why
 # Trim to 140 characters
 #  if len(result) > 140:
