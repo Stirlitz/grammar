@@ -44,6 +44,7 @@ class ParserFunctions(unittest.TestCase):
 
     def test_possessive_as_be(self):
         self.positive("Its the best", "[It's] the best")
+        self.positive("Whose your friend?", "[Who's] your friend?")
         # Book titles in ALLCAPS should be ignored.
         self.negative("Some author, whose THE BOOK does, is")
 

@@ -55,6 +55,9 @@ class CorrectionManager(object):
     def do_checks(self, current_rerun, cur):
         if 1 in current_rerun:
             # First pass
+            if cur.word_lower in self.SET_possessive_as_be:
+                # conflicts with 'whose'
+                Corrections.possessive_as_be.do(self, cur)
             if cur.word_lower == "you're":
                 Corrections.youre_noun.do(self, cur)
             elif cur.word_lower == 'own':
@@ -82,9 +85,6 @@ class CorrectionManager(object):
                 Corrections.supposed_to.do(self, cur)
             elif cur.word_lower == "whom" or cur.word_lower == "whomever":
                 Corrections.whom_be.do(self, cur)
-            # Formerly first; moved to end / == is faster than in
-            elif cur.word_lower in self.SET_possessive_as_be:
-                Corrections.possessive_as_be.do(self, cur)
         else:
             if 10 in current_rerun:
                 # Caused by: youre_noun, its_own, there_own
