@@ -6,7 +6,7 @@ SET_NOFOLLOW = set(['lol', 'be', 'do', 'did', 'get', 'got'])
 
 def do(self, cur):
     """Keyword: then
-    Src: (better|more|less) _ <word>
+    Src: <word> (better|more|less) _ <word>
     Dst: ... [than] <word>
     """
     prev_words = self.sequence.prev_get_words_continuous()

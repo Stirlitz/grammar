@@ -58,6 +58,8 @@ class ParserFunctions(unittest.TestCase):
         self.negative("Look at its after effects!")
         # Exception 3
         self.negative("See your all but nothing system")
+        # Boundary check: _ (2)
+        self.negative("It's its")
 
     def test_youre_noun(self):
         self.positive("of you're own!", "of [your] own!")
@@ -72,9 +74,13 @@ class ParserFunctions(unittest.TestCase):
         self.negative("You're life.")
         self.negative("You're life!")
         self.negative("You're life")
+        # Boundary check: _ (1)
+        self.negative("See, you're")
 
     def test_its_own(self):
         self.positive("sees it's own", "sees [its] own")
+        # Boundary check: (1) _
+        self.negative("It's those people")
 
     def test_there_own(self):
         self.positive("To each there own", "To each [their] own")
@@ -86,11 +92,15 @@ class ParserFunctions(unittest.TestCase):
         self.negative("Do any of you out there own these items?")
         # Exception with fused word
         self.negative("anyone out there own it?")
+        # Boundary check: (there) _
+        self.negative("Own this item now")
 
     def test_whose_been(self):
         self.positive("Whose been there?", "[Who's] been there?")
         self.positive("See that person, whose been there.",
                       "person, [who's] been there")
+        # Boundary check: _ (been)
+        self.negative("Whose?")
 
     def test_theyre_be(self):
         self.positive("They're is a cow", "[There's] a cow")
@@ -102,10 +112,16 @@ class ParserFunctions(unittest.TestCase):
         # Exception 2
         self.negative("they're is they are")
         self.negative("they're, aren't they?")  # 2b
+        # Boundary check: _ <be>
+        self.negative("See, they're")
 
     def test_their_modal(self):
         self.positive("Their is", "[There] is")
         self.positive("Their must be something!", "[There] must be something!")
+        # Boundary check: _ (1)
+        self.negative("their")
+        # Restriction: _ <modal>
+        self.negative("their item")
 
     def test_be_noun(self):
         self.positive("I am hear", "I am [here]")
@@ -120,6 +136,13 @@ class ParserFunctions(unittest.TestCase):
         # Ignore misuse of 'am'
         self.negative("He am hear")
         self.negative("They am hear")
+        # Boundary check: <be> _hear_
+        self.negative("Hear the silence")
+        self.negative("They can hear you")
+        # Boundary check: <be> _board_ (with)
+        self.negative("Look at the board")
+        self.negative("Board the train")
+        self.negative("Board with them")
 
     def test_then(self):
         self.positive("this is better then that", "this is better [than] that")
@@ -129,6 +152,9 @@ class ParserFunctions(unittest.TestCase):
         # Exception 2
         self.negative("if it is better then you use it")
         self.negative("when it is better then get it")
+        # Boundary check: (1) <comparative> _ (1)
+        self.negative("Then they went somewhere")
+        self.negative("Do it better then")
 
     def test_than(self):
         self.positive("I did this and than I did that",
@@ -138,6 +164,9 @@ class ParserFunctions(unittest.TestCase):
         # Exception: 2
         self.negative("better than something and than something else")
         self.negative("Is it more than they do or than I do?")
+        # Boundary check: (1) <and/but/yet> _
+        self.negative("than")
+        self.negative("this and than")
 
     def test_of(self):
         self.positive("I should of done it", "I should['ve] done it")
@@ -157,9 +186,14 @@ class ParserFunctions(unittest.TestCase):
         self.negative("might of the people")
         # Exception: 4
         self.negative("more of this than they would of that")
+        # Boundary check: (1) (not)? _ (1)
+        self.negative("of")
+        self.negative("not of this but that")
 
     def test_your_are(self):
         self.positive("your are", "[you] are")
+        # Boundary check: _ (are)
+        self.negative("your")
 
     def test_supposed_to(self):
         self.positive("I don't supposed to", "[I'm not] supposed to")
@@ -169,7 +203,10 @@ class ParserFunctions(unittest.TestCase):
         self.positive("I doesn't supposed to", "[I'm not] supposed to")
         self.positive("you doesn't supposed to", "you [aren't] supposed to")
         self.positive("he don't supposed to", "he [isn't] supposed to")
-        # Ignore modals
+        # Boundary check: (2) _ (to)
+        self.negative("They supposed")
+        self.negative("They supposed not")
+        # Restriction: <be>, not <modal> _
         self.negative("I can't supposed to")
 
     def test_whom_be(self):
@@ -198,6 +235,11 @@ class ParserFunctions(unittest.TestCase):
         self.negative("Whom is it?")
         # Other verbs might be valid for "whom"
         self.negative("Whom do they see?")
+        # Boundary check: (1 if not whomever) _ <be>
+        self.negative("for whom?")
+        self.negative("whom they say")
+        # Restrictions: unrecognized nouns
+        self.negative("blah whom is")
 
     def test_case(self):
         # lowercase detection
@@ -226,43 +268,6 @@ class ParserFunctions(unittest.TestCase):
         self.positive("their is,", "[there] is")
         self.positive("their is;", "[there] is")
 
-    def test_boundary_checks(self):
-        """Make sure that the checks do not overread"""
-        # possessive_as_be: <its/your/whose> _
-        self.negative("It's its")  # its_own: _ <it's>
-        self.negative("your")  # your_are: <your> _
-        self.negative("Whose?")  # whose_been: <whose> _
-        # youre_noun: <you're> _
-        self.negative("See you're")
-        # there_own: _ <own>
-        self.negative("Own this item now")
-        # theyre_be: <they're> _
-        self.negative("See, they're")
-        # their_modal: <their> _
-        self.negative("their")
-        self.negative("their item")
-        # be_noun: _ <hear/board with>
-        self.negative("They can hear you")
-        self.negative("Hear the silence")
-        self.negative("Look at the board")
-        self.negative("Board the train")
-        self.negative("Board with them")
-        # then: _ <comparative> <then> _
-        self.negative("Then they went somewhere")
-        self.negative("Do it better then")
-        # than: _ <and/but/yet> _
-        self.negative("And it works")
-        self.negative("this and")
-        # of: _ (not)? <of> _
-        self.negative("of")
-        self.negative("not of this but that")
-        # supposed_to: _ <supposed> _
-        self.negative("They supposed")
-        self.negative("They supposed not")
-        # whom_be: _ <whom> _
-        self.negative("whom they say")
-        self.negative("for whom?")
-
     def test_wording(self):
         """Verify that wording can be generated without failing"""
         self.positive(
@@ -273,7 +278,7 @@ class ParserFunctions(unittest.TestCase):
 
 if __name__ == '__main__':
     stream_null = StringIO()
-    logging.basicConfig(stream=stream_null,level=logging.DEBUG)
+    logging.basicConfig(stream=stream_null, level=logging.DEBUG)
     handler_stream = StreamHandler(stream=sys.stderr)
     handler_mem = MemoryHandler(1024, target=handler_stream)
     handler_mem.setLevel(logging.DEBUG)

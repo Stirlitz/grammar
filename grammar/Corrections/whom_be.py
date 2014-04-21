@@ -9,8 +9,8 @@ SET_3 = set(['person', 'guy', 'he', 'him', 'she', 'her', 'it'])
 
 def do(self, cur):
     """Keyword: whom/whomever
-    Src: _ is/are
-    Dst: [who/ever] ...
+    Src: _ <be>
+    Dst: [who/whoever] ...
     """
     person = 0
     if cur.word_lower == 'whomever':
