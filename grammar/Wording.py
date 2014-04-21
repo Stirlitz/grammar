@@ -131,10 +131,10 @@ def generate(corrections, corrected, user):
     modals = modals_intent_perfect
     verbs = said_past
     # 70% chance to use "that"
-    if message[1] and 70 > random.randrange(0, 100):
+    if message[1] and 70 > random.randrange(0, 100): # pragma: no cover
         clause += ' that'
     # Alter it! (40%)
-    if 40 > random.randrange(0, 100):
+    if 40 > random.randrange(0, 100): # pragma: no cover
         message_alter = random.choice(message_alter)
         if message_alter[1]:
             # 50% chance to bypass the first clause, if possible
@@ -151,10 +151,10 @@ def generate(corrections, corrected, user):
     predicate = ''
     # choose
     modals = random.choice(modals)
-    if modals:
+    if modals: # pragma: no cover
         predicate += modals + ' '
     verbs = random.choice(verbs)
-    if verbs:
+    if verbs: # pragma: no cover
         predicate += verbs + ' '
     # jump that quote
     predicate += '%s instead.' % (english_join(tuple(map(u'“{0}”'.format, corrections))))
