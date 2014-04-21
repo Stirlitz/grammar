@@ -395,7 +395,7 @@ class SequenceManager(list):
         if not self.next_has(words):
             return False
         # check for lack of breakers
-        if sentences:
+        if sentences:  # pragma: no cover
             for i in range(
                     self.position + 1 + already_checked * 2,
                     self.position + 1 + words * 2,
@@ -416,7 +416,7 @@ class SequenceManager(list):
         if not self.position:
             return []
         i = self.position - 1
-        if sentences:
+        if sentences:  # pragma: no cover
             while i >= 0:  # 1
                 if self[i].sentenceBreaker:
                     i -= 2

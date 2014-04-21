@@ -78,6 +78,8 @@ class ParserFunctions(unittest.TestCase):
         # do_fixcaps
         check_transform('CONTENT MUST NOT BE WRITTEN ENTIRELY IN CAPITALS',
                         'Content must not be written entirely in capitals')
+        check_transform('ALLCAPS @lower http://is/ignored',
+                        'Allcaps @lower http://is/ignored')
         check_transform('Titlecase Is Annoying Too For Some People',
                         'Titlecase is annoying too for some people')
         # do_fixi
@@ -251,8 +253,9 @@ class ParserFunctions(unittest.TestCase):
         self.positive("he didn't supposed to", "he [wasn't] supposed to")
         self.negative("this guy didn't supposed to")  # unknown person
         # Boundary check: (2) _ (to)
-        self.negative("They supposed to")
+        self.negative("They supposed")
         self.negative("They supposed not")
+        self.negative("become supposed to")
         # Restriction: <be>, not <modal> _
         self.negative("I can't supposed to")
 
@@ -308,6 +311,8 @@ class ParserFunctions(unittest.TestCase):
         self.positive("their is!", "[there] is!")
         # Original punctuation should be out of the brackets
         self.positive("I am hear!", "I am [here]!")
+        # Drop leading and trailing spaces
+        self.positive(" their is ", "[there] is")
         # Retain double spaces
         self.positive("their  is", "[there]  is")
         # Drop periods, commas, and semicolons
