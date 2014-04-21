@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 SET_3 = set(['he', 'she', 'it'])
-SET_2 = set(['we', 'you', 'they'])  # 'i'
+SET_2 = set(['we', 'you', 'they'])
 
 
 def do(self, cur):
@@ -9,7 +9,7 @@ def do(self, cur):
     Src: (<word> doesn't|I don't|<word> (?<!I )don't) _ to
     Dst: [isn't|I'm not|aren't] _ to
 
-    NOTE: causes extension - don't -> [aren't]
+    NOTE: causes extension - don't -> [aren't], didn't -> [wasn't/weren't]
     """
     if not self.sequence.next_has_continuous(1):
         return
@@ -32,6 +32,13 @@ def do(self, cur):
         elif not prev_word_2.word_lower in SET_2:
             person = 3
         # else: person = 2
+    elif prev_word_1.word_lower == "didn't":
+        if prev_word_2.word_lower == "i" or prev_word_2.word_lower in SET_2:
+            person = 4
+        elif prev_word_2.word_lower in SET_3:
+            person = 5
+        else:
+            return  # unknown conjugation
     else:
         return
     self.matched('supposed-to')
@@ -44,5 +51,9 @@ def do(self, cur):
     elif person == 2:
         prev_word_1.replace("aren't")
         self.rerun.add(11)  # Rerun: your_are for "you aren't"
-    else:  # person == 3
+    elif person == 3:
         prev_word_1.replace("isn't")
+    elif person == 4:
+        prev_word_1.replace("weren't")
+    else:  # if person == 5:
+        prev_word_1.replace("wasn't")
