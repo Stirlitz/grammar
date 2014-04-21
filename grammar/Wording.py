@@ -146,7 +146,7 @@ def generate(corrections, corrected, user):
             modals = message_alter[2]
         if message_alter[3]:
             verbs = message_alter[3]
-    else:
+    else:  # pragma: no cover
         message_alter = None  # save memory
     predicate = ''
     # choose
@@ -168,12 +168,12 @@ def generate(corrections, corrected, user):
             clause[0].upper() + clause[1:], user, predicate)
     # Do we need to check? Any space for why?
     # at least 3 characters have to be added
-    if corrected and len(result) <= 137:
+    if corrected and len(result) <= 137:  # pragma: no cover
         why = []
         for w in corrected:
             why.append(random.choice(why_reasons[w]))
         why = ' %s.' % first_cap(english_join(why))
-        if len(result) + len(why) <= 140:  # pragma: no cover
+        if len(result) + len(why) <= 140:
             result += why
 # Trim to 140 characters
 #  if len(result) > 140:

@@ -44,7 +44,16 @@ class ParserFunctions(unittest.TestCase):
     def negative(self, text):
         self.assertFalse(self.load(text))
 
-    # Transformer Tests
+    # Misc Tests
+    def test_wording_first_cap(self):
+        self.assertEqual(grammar.Wording.first_cap('abc'), 'Abc')
+        self.assertEqual(grammar.Wording.first_cap('23-234234{:[[;;""]:]abc'), '23-234234{:[[;;""]:]Abc')
+
+    def test_wording_english_join(self):
+        self.assertEqual(grammar.Wording.english_join(['a']), 'a')
+        self.assertEqual(grammar.Wording.english_join(['a', 'b']), 'a and b')
+        self.assertEqual(grammar.Wording.english_join(['a', 'b', 'c']), 'a, b and c')
+
     def test_transform(self):
         """Test the text transformations."""
         # Create copy with all options set to True
